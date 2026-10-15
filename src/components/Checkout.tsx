@@ -53,7 +53,7 @@ export function Checkout({ onClose }: { onClose: () => void }) {
   const payCard = (e: React.FormEvent) => {
     e.preventDefault();
     if (card.number.replace(/\D/g, "").length < 13 || !card.name || !card.exp || card.cvv.length < 3)
-      return toast.error("Preencha os dados do cartão.");
+      { toast.error("Preencha os dados do cartão."); return; }
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
