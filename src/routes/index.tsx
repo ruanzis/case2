@@ -4,8 +4,6 @@ import { Search, Zap } from "lucide-react";
 import { SkinCard } from "@/components/SkinCard";
 import { skins, INSTANT_COUNT, type Category } from "@/lib/skins";
 import { cn } from "@/lib/utils";
-import { Link } from "@tanstack/react-router";
-import { useSubscription } from "@/lib/use-subscription";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,17 +42,6 @@ function Market() {
     if (sort === "desc") r = [...r].sort((a, b) => b.price - a.price);
     return r;
   }, [q, cat, speed, min, max, sort]);
-
-  const { active } = useSubscription();
-  if (active === null) return <p className="py-10 text-center text-sm text-muted-foreground">Carregando...</p>;
-  if (!active)
-    return (
-      <div className="mx-auto max-w-md space-y-3 rounded-xl bg-surface p-6 text-center">
-        <h1 className="font-display text-xl font-bold">Lista de skins para assinantes</h1>
-        <p className="text-sm text-muted-foreground">Assine por R$ 41,40 (pagamento único via Pix) para ver a lista completa de skins atualizada.</p>
-        <Link to="/assinatura" className="inline-block rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Ver assinatura</Link>
-      </div>
-    );
 
   return (
     <div className="flex gap-4">
