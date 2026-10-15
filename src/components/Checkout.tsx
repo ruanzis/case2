@@ -19,7 +19,17 @@ export function Checkout({ onClose }: { onClose: () => void }) {
   const [loading, setLoading] = useState(false);
   const [pix, setPix] = useState<Pix | null>(null);
   const [paid, setPaid] = useState(false);
+  const [approving, setApproving] = useState(false);
   const [card, setCard] = useState({ number: "", name: "", exp: "", cvv: "" });
+
+  const approve = (msg: string) => {
+    setApproving(true);
+    window.setTimeout(() => {
+      setApproving(false);
+      setPaid(true);
+      toast.success(msg);
+    }, 6000);
+  };
 
   useEffect(() => {
     if (!pix || paid) return;
