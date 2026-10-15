@@ -20,11 +20,11 @@ export interface Skin {
   name: string;
   category: Category;
   image: string;
-  wear?: string;
-  float?: number;
+  wear?: string | undefined;
+  float?: number | undefined;
   stattrak?: boolean;
-  discount?: number;
-  delivery?: "1m" | "15m";
+  discount?: number | undefined;
+  delivery?: "1m" | "15m" | undefined;
   price: number;
 }
 
