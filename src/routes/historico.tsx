@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { History, CheckCircle2 } from "lucide-react";
 import { useCart } from "@/lib/cart";
 import { brl } from "@/lib/skins";
+import { LoginPrompt } from "@/components/LoginPrompt";
 
 export const Route = createFileRoute("/historico")({
   head: () => ({
@@ -18,7 +19,8 @@ export const Route = createFileRoute("/historico")({
 });
 
 function Historico() {
-  const { history } = useCart();
+  const { history, user, authReady } = useCart();
+  if (authReady && !user) return <LoginPrompt text="Entre na sua conta para ver seu histórico de compras." />;
   if (!history.length)
     return (
       <div className="flex flex-col items-center justify-center rounded-xl bg-surface py-24 text-center">

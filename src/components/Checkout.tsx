@@ -5,7 +5,7 @@ import { Copy, CheckCircle2, Loader2, X, QrCode, CreditCard } from "lucide-react
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
 import { brl } from "@/lib/skins";
-import { createPix, checkPix } from "@/lib/pix.functions";
+import { createPix, checkPix, payCard as payCardFn } from "@/lib/pix.functions";
 
 type Pix = { pixCode: string; reference: string; amount: number };
 
@@ -14,6 +14,7 @@ export function Checkout({ onClose }: { onClose: () => void }) {
   const bought = useRef(cart.items);
   const gen = useServerFn(createPix);
   const check = useServerFn(checkPix);
+  const cardPay = useServerFn(payCardFn);
   const [method, setMethod] = useState<"pix" | "card">("pix");
   const [loading, setLoading] = useState(false);
   const [pix, setPix] = useState<Pix | null>(null);
@@ -29,8 +30,8 @@ export function Checkout({ onClose }: { onClose: () => void }) {
           clearInterval(t);
           if (r.status === "completed") {
             setPaid(true);
-            cart.addPurchased(bought.current, "pix");
             cart.clear();
+            await cart.refresh();
             toast.success("Pagamento confirmado!");
           } else toast.error("Pagamento não concluído.");
         }
@@ -42,7 +43,7 @@ export function Checkout({ onClose }: { onClose: () => void }) {
   const startPix = async () => {
     setLoading(true);
     try {
-      const r = await gen({ data: { ids: cart.items.map((i) => i.id) } });
+      const r = await gen({ data: { ids: bought.current.map((i) => i.id) } });
       if ("error" in r && r.error) toast.error(r.error);
       else setPix(r as Pix);
     } catch {
@@ -52,18 +53,22 @@ export function Checkout({ onClose }: { onClose: () => void }) {
     }
   };
 
-  const payCard = (e: React.FormEvent) => {
+  const payCard = async (e: React.FormEvent) => {
     e.preventDefault();
     if (card.number.replace(/\D/g, "").length < 13 || !card.name || !card.exp || card.cvv.length < 3)
       { toast.error("Preencha os dados do cartão."); return; }
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+    try {
+      await cardPay({ data: { ids: bought.current.map((i) => i.id) } });
       setPaid(true);
-      cart.addPurchased(bought.current, "card");
       cart.clear();
+      await cart.refresh();
       toast.success("Pagamento com cartão aprovado!");
-    }, 1500);
+    } catch {
+      toast.error("Não foi possível concluir o pagamento.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   const input = "w-full rounded-md border bg-card px-3 py-2 text-sm outline-none focus:border-primary";
