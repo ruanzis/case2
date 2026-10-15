@@ -28,6 +28,7 @@ export function Checkout({ onClose }: { onClose: () => void }) {
           clearInterval(t);
           if (r.status === "completed") {
             setPaid(true);
+            cart.addPurchased(cart.items);
             cart.clear();
             toast.success("Pagamento confirmado!");
           } else toast.error("Pagamento não concluído.");
@@ -58,6 +59,7 @@ export function Checkout({ onClose }: { onClose: () => void }) {
     setTimeout(() => {
       setLoading(false);
       setPaid(true);
+      cart.addPurchased(cart.items);
       cart.clear();
       toast.success("Pagamento com cartão aprovado!");
     }, 1500);
