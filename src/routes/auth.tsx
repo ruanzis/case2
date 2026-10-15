@@ -39,7 +39,7 @@ function AuthPage() {
 
   useEffect(() => { if (user) navigate({ to: "/venda-instantanea", replace: true }); }, [user, navigate]);
 
-  const submit = async (e: React.FormEvent) => {
+  const submit = async (e: React.FormEvent): Promise<unknown> => {
     e.preventDefault();
     const em = email.safeParse(form.email);
     if (!em.success) return toast.error(em.error.issues[0]!.message);
