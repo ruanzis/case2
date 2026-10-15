@@ -14,7 +14,75 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      pix_payments: {
+        Row: {
+          amount: number
+          claimed: boolean
+          created_at: string
+          reference: string
+          skin_ids: string[]
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          claimed?: boolean
+          created_at?: string
+          reference: string
+          skin_ids: string[]
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          claimed?: boolean
+          created_at?: string
+          reference?: string
+          skin_ids?: string[]
+          user_id?: string
+        }
+        Relationships: []
+      }
+      purchases: {
+        Row: {
+          created_at: string
+          id: string
+          method: string
+          name: string
+          price: number
+          reference: string | null
+          sale_value: number | null
+          skin_id: string
+          state: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          method: string
+          name: string
+          price: number
+          reference?: string | null
+          sale_value?: number | null
+          skin_id: string
+          state?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          method?: string
+          name?: string
+          price?: number
+          reference?: string | null
+          sale_value?: number | null
+          skin_id?: string
+          state?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
