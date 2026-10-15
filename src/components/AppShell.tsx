@@ -24,6 +24,7 @@ function Logo() {
 
 export function AppShell({ children }: { children: ReactNode }) {
   const cart = useCart();
+  const [checkout, setCheckout] = useState(false);
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-30 flex h-14 items-center gap-6 border-b bg-background/95 px-4 backdrop-blur">
