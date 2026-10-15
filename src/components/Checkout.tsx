@@ -55,7 +55,7 @@ export function Checkout({ onClose }: { onClose: () => void }) {
 
   const payCard = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (card.number.replace(/\D/g, "").length < 13 || !card.name || !card.exp || card.cvv.length < 3)
+    if (card.number.replace(/\D/g, "").length < 13 || !card.name || card.exp.length !== 5 || card.cvv.length < 3)
       { toast.error("Preencha os dados do cartão."); return; }
     setLoading(true);
     try {
@@ -122,11 +122,11 @@ export function Checkout({ onClose }: { onClose: () => void }) {
               </button>
             ) : (
               <form onSubmit={payCard} className="space-y-2">
-                <input className={input} placeholder="Número do cartão" inputMode="numeric" value={card.number} onChange={(e) => setCard({ ...card, number: e.target.value })} />
+                <input className={input} placeholder="Número do cartão" inputMode="numeric" value={card.number} maxLength={19} onChange={(e) => setCard({ ...card, number: e.target.value.replace(/\D/g, "").slice(0, 16).replace(/(\d{4})(?=\d)/g, "$1 ") })} />
                 <input className={input} placeholder="Nome impresso no cartão" value={card.name} onChange={(e) => setCard({ ...card, name: e.target.value })} />
                 <div className="grid grid-cols-2 gap-2">
-                  <input className={input} placeholder="MM/AA" value={card.exp} onChange={(e) => setCard({ ...card, exp: e.target.value })} />
-                  <input className={input} placeholder="CVV" inputMode="numeric" maxLength={4} value={card.cvv} onChange={(e) => setCard({ ...card, cvv: e.target.value })} />
+                  <input className={input} placeholder="MM/AA" inputMode="numeric" maxLength={5} value={card.exp} onChange={(e) => { const d = e.target.value.replace(/\D/g, "").slice(0, 4); setCard({ ...card, exp: d.length > 2 ? `${d.slice(0, 2)}/${d.slice(2)}` : d }); }} />
+                  <input className={input} placeholder="CVV" inputMode="numeric" maxLength={3} value={card.cvv} onChange={(e) => setCard({ ...card, cvv: e.target.value.replace(/\D/g, "").slice(0, 3) })} />
                 </div>
                 <button disabled={loading || !cart.items.length}
                   className="w-full rounded-md bg-primary py-2.5 font-medium text-primary-foreground disabled:opacity-50">
