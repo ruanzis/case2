@@ -18,7 +18,7 @@ const tabs = [
 function Logo() {
   return (
     <Link to="/" className="font-display text-xl font-bold tracking-tight">
-      csgo<span className="text-primary">)</span>money<span className="text-muted-foreground text-sm">.site</span>
+      csgo<span className="text-primary">)</span>money
     </Link>
   );
 }
