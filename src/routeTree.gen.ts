@@ -10,33 +10,91 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as HistoricoRouteImport } from './routes/historico'
+import { Route as P2pRouteImport } from './routes/p2p'
+import { Route as SaqueRouteImport } from './routes/saque'
+import { Route as VendaInstantaneaRouteImport } from './routes/venda-instantanea'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoricoRoute = HistoricoRouteImport.update({
+  id: '/historico',
+  path: '/historico',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const P2pRoute = P2pRouteImport.update({
+  id: '/p2p',
+  path: '/p2p',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SaqueRoute = SaqueRouteImport.update({
+  id: '/saque',
+  path: '/saque',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VendaInstantaneaRoute = VendaInstantaneaRouteImport.update({
+  id: '/venda-instantanea',
+  path: '/venda-instantanea',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/faq': typeof FaqRoute
+  '/historico': typeof HistoricoRoute
+  '/p2p': typeof P2pRoute
+  '/saque': typeof SaqueRoute
+  '/venda-instantanea': typeof VendaInstantaneaRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/faq': typeof FaqRoute
+  '/historico': typeof HistoricoRoute
+  '/p2p': typeof P2pRoute
+  '/saque': typeof SaqueRoute
+  '/venda-instantanea': typeof VendaInstantaneaRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/faq': typeof FaqRoute
+  '/historico': typeof HistoricoRoute
+  '/p2p': typeof P2pRoute
+  '/saque': typeof SaqueRoute
+  '/venda-instantanea': typeof VendaInstantaneaRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    '/' | '/faq' | '/historico' | '/p2p' | '/saque' | '/venda-instantanea'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/faq' | '/historico' | '/p2p' | '/saque' | '/venda-instantanea'
+  id:
+    | '__root__'
+    | '/'
+    | '/faq'
+    | '/historico'
+    | '/p2p'
+    | '/saque'
+    | '/venda-instantanea'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  FaqRoute: typeof FaqRoute
+  HistoricoRoute: typeof HistoricoRoute
+  P2pRoute: typeof P2pRoute
+  SaqueRoute: typeof SaqueRoute
+  VendaInstantaneaRoute: typeof VendaInstantaneaRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +106,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/historico': {
+      id: '/historico'
+      path: '/historico'
+      fullPath: '/historico'
+      preLoaderRoute: typeof HistoricoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/p2p': {
+      id: '/p2p'
+      path: '/p2p'
+      fullPath: '/p2p'
+      preLoaderRoute: typeof P2pRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/saque': {
+      id: '/saque'
+      path: '/saque'
+      fullPath: '/saque'
+      preLoaderRoute: typeof SaqueRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/venda-instantanea': {
+      id: '/venda-instantanea'
+      path: '/venda-instantanea'
+      fullPath: '/venda-instantanea'
+      preLoaderRoute: typeof VendaInstantaneaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  FaqRoute: FaqRoute,
+  HistoricoRoute: HistoricoRoute,
+  P2pRoute: P2pRoute,
+  SaqueRoute: SaqueRoute,
+  VendaInstantaneaRoute: VendaInstantaneaRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
