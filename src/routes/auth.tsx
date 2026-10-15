@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable/index";
 import { useCart } from "@/lib/cart";
 
 export const Route = createFileRoute("/auth")({
@@ -74,6 +75,11 @@ function AuthPage() {
     return undefined;
   };
 
+  const google = async () => {
+    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
+    if (r.error) toast.error("Não foi possível entrar com o Google.");
+  };
+
   const input = "w-full rounded-md border bg-card px-3 py-2.5 text-sm outline-none focus:border-primary";
 
   return (
@@ -86,7 +92,7 @@ function AuthPage() {
       ) : (
         <>
           <h1 className="mb-1 font-display text-2xl font-bold">{mode === "in" ? "Entrar" : "Criar conta"}</h1>
-          <p className="mb-5 text-sm text-muted-foreground">Suas compras e seu histórico ficam salvos na sua conta.</p>
+          <p className="mb-5 text-sm text-muted-foreground">Para acessar o site é preciso se registrar. Suas compras e histórico ficam salvos na conta.</p>
           <form onSubmit={submit} className="space-y-3">
             <input className={input} type="email" placeholder="E-mail" autoComplete="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
             <input className={input} type="password" placeholder="Senha" autoComplete={mode === "in" ? "current-password" : "new-password"} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
@@ -100,8 +106,10 @@ function AuthPage() {
               {loading ? "Aguarde..." : mode === "in" ? "Entrar" : "Criar conta"}
             </button>
           </form>
+          <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground"><div className="h-px flex-1 bg-border" />ou<div className="h-px flex-1 bg-border" /></div>
+          <button type="button" onClick={google} className="w-full rounded-md border bg-card py-2.5 text-sm font-medium">Continuar com o Google</button>
           <button onClick={() => setMode(mode === "in" ? "up" : "in")} className="mt-4 w-full text-center text-sm text-muted-foreground hover:text-foreground">
-            {mode === "in" ? "Não tem conta? Criar conta" : "Já tem conta? Entrar"}
+            {mode === "in" ? "Primeiro acesso? Criar conta" : "Já tem conta? Entrar"}
           </button>
         </>
       )}

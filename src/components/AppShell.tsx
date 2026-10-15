@@ -1,7 +1,7 @@
-import { Link, useNavigate } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
 import { ShoppingCart, Zap, Users, Landmark, History, X, Trash2, LogOut } from "lucide-react";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Checkout } from "./Checkout";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
@@ -27,6 +27,17 @@ export function AppShell({ children }: { children: ReactNode }) {
   const cart = useCart();
   const [checkout, setCheckout] = useState(false);
   const navigate = useNavigate();
+  const pathname = useRouterState({ select: (r) => r.location.pathname });
+  const onAuth = pathname === "/auth";
+  useEffect(() => {
+    if (cart.authReady && !cart.user && !onAuth) navigate({ to: "/auth", replace: true });
+  }, [cart.authReady, cart.user, onAuth, navigate]);
+  if (!onAuth && !cart.user) {
+    return <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">Carregando...</div>;
+  }
+  if (onAuth) {
+    return <div className="min-h-screen p-4"><div className="mb-6 text-center"><Logo /></div>{children}</div>;
+  }
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-30 flex h-14 items-center gap-6 border-b bg-background/95 px-4 backdrop-blur">
