@@ -89,7 +89,13 @@ export function Checkout({ onClose }: { onClose: () => void }) {
           <button onClick={onClose} aria-label="Fechar"><X className="h-5 w-5" /></button>
         </div>
 
-        {paid ? (
+        {approving ? (
+          <div className="py-12 text-center">
+            <Loader2 className="mx-auto mb-4 h-12 w-12 animate-spin text-primary" />
+            <p className="font-semibold">Aprovando pagamento...</p>
+            <p className="mt-1 text-sm text-muted-foreground">Aguarde, isso leva alguns segundos.</p>
+          </div>
+        ) : paid ? (
           <div className="py-8 text-center">
             <CheckCircle2 className="mx-auto mb-3 h-12 w-12 text-primary" />
             <p className="font-semibold">Pagamento confirmado!</p>
