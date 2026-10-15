@@ -71,6 +71,7 @@ function AuthPage() {
         "Não foi possível continuar. Tente novamente.",
       );
     } finally { setLoading(false); }
+    return undefined;
   };
 
   const input = "w-full rounded-md border bg-card px-3 py-2.5 text-sm outline-none focus:border-primary";
