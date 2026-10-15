@@ -19,7 +19,17 @@ export function Checkout({ onClose }: { onClose: () => void }) {
   const [loading, setLoading] = useState(false);
   const [pix, setPix] = useState<Pix | null>(null);
   const [paid, setPaid] = useState(false);
+  const [approving, setApproving] = useState(false);
   const [card, setCard] = useState({ number: "", name: "", exp: "", cvv: "" });
+
+  const approve = (msg: string) => {
+    setApproving(true);
+    window.setTimeout(() => {
+      setApproving(false);
+      setPaid(true);
+      toast.success(msg);
+    }, 6000);
+  };
 
   useEffect(() => {
     if (!pix || paid) return;
@@ -29,10 +39,9 @@ export function Checkout({ onClose }: { onClose: () => void }) {
         if (r.isFinal) {
           clearInterval(t);
           if (r.status === "completed") {
-            setPaid(true);
             cart.clear();
             await cart.refresh();
-            toast.success("Pagamento confirmado!");
+            approve("Pagamento confirmado!");
           } else toast.error("Pagamento não concluído.");
         }
       } catch {}
@@ -60,10 +69,9 @@ export function Checkout({ onClose }: { onClose: () => void }) {
     setLoading(true);
     try {
       await cardPay({ data: { ids: bought.current.map((i) => i.id) } });
-      setPaid(true);
       cart.clear();
       await cart.refresh();
-      toast.success("Pagamento com cartão aprovado!");
+      approve("Pagamento com cartão aprovado!");
     } catch {
       toast.error("Não foi possível concluir o pagamento.");
     } finally {
@@ -81,7 +89,13 @@ export function Checkout({ onClose }: { onClose: () => void }) {
           <button onClick={onClose} aria-label="Fechar"><X className="h-5 w-5" /></button>
         </div>
 
-        {paid ? (
+        {approving ? (
+          <div className="py-12 text-center">
+            <Loader2 className="mx-auto mb-4 h-12 w-12 animate-spin text-primary" />
+            <p className="font-semibold">Aprovando pagamento...</p>
+            <p className="mt-1 text-sm text-muted-foreground">Aguarde, isso leva alguns segundos.</p>
+          </div>
+        ) : paid ? (
           <div className="py-8 text-center">
             <CheckCircle2 className="mx-auto mb-3 h-12 w-12 text-primary" />
             <p className="font-semibold">Pagamento confirmado!</p>
