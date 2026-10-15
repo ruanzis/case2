@@ -45,6 +45,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <nav className="hidden gap-5 text-sm text-muted-foreground md:flex">
           <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-accent" }}>Market</Link>
           <Link to="/faq" activeProps={{ className: "text-accent" }}>FAQ</Link>
+          <Link to="/assinatura" activeProps={{ className: "text-accent" }}>Assinatura</Link>
         </nav>
         <div className="ml-auto flex items-center gap-3">
           <button
