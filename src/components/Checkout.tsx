@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import { QRCodeSVG } from "qrcode.react";
 import { Copy, CheckCircle2, Loader2, X, QrCode, CreditCard } from "lucide-react";
@@ -11,6 +11,7 @@ type Pix = { pixCode: string; reference: string; amount: number };
 
 export function Checkout({ onClose }: { onClose: () => void }) {
   const cart = useCart();
+  const bought = useRef(cart.items);
   const gen = useServerFn(createPix);
   const check = useServerFn(checkPix);
   const [method, setMethod] = useState<"pix" | "card">("pix");
@@ -28,7 +29,7 @@ export function Checkout({ onClose }: { onClose: () => void }) {
           clearInterval(t);
           if (r.status === "completed") {
             setPaid(true);
-            cart.addPurchased(cart.items);
+            cart.addPurchased(bought.current, "pix");
             cart.clear();
             toast.success("Pagamento confirmado!");
           } else toast.error("Pagamento não concluído.");
@@ -59,7 +60,7 @@ export function Checkout({ onClose }: { onClose: () => void }) {
     setTimeout(() => {
       setLoading(false);
       setPaid(true);
-      cart.addPurchased(cart.items);
+      cart.addPurchased(bought.current, "card");
       cart.clear();
       toast.success("Pagamento com cartão aprovado!");
     }, 1500);
