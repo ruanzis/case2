@@ -3,6 +3,9 @@ import { toast } from "sonner";
 import { Send, Zap } from "lucide-react";
 import { useCart, SELL_FEE } from "@/lib/cart";
 import { brl } from "@/lib/skins";
+import { useServerFn } from "@tanstack/react-start";
+import { sellPurchase, transferPurchase } from "@/lib/pix.functions";
+import { LoginPrompt } from "@/components/LoginPrompt";
 
 export const Route = createFileRoute("/venda-instantanea")({
   head: () => ({
@@ -19,7 +22,20 @@ export const Route = createFileRoute("/venda-instantanea")({
 });
 
 function Page() {
-  const { inventory, balance, sellItem, transferItem } = useCart();
+  const { inventory, balance, refresh, user, authReady } = useCart();
+  const sell = useServerFn(sellPurchase);
+  const transfer = useServerFn(transferPurchase);
+  if (authReady && !user) return <LoginPrompt text="Entre na sua conta para ver seus itens comprados." />;
+  const sellItem = async (id: string) => {
+    try { const r = await sell({ data: { id } }); toast.success(`Vendido! ${brl(r.value)} adicionado ao saldo.`); }
+    catch { toast.error("Não foi possível vender o item."); }
+    refresh();
+  };
+  const transferItem = async (id: string) => {
+    try { await transfer({ data: { id } }); toast.success("Transferência para sua conta solicitada."); }
+    catch { toast.error("Não foi possível transferir o item."); }
+    refresh();
+  };
   return (
     <div className="space-y-4">
       <div className="flex flex-wrap items-end justify-between gap-3">
@@ -43,11 +59,11 @@ function Page() {
                 <p className="text-sm font-semibold text-primary">Venda: {brl(net)}</p>
                 <div className="mt-2 grid gap-1.5">
                   <button
-                    onClick={() => toast.success(`Vendido! ${brl(sellItem(i.uid))} adicionado ao saldo.`)}
+                    onClick={() => sellItem(i.uid)}
                     className="flex items-center justify-center gap-1 rounded-md bg-primary py-1.5 text-xs font-medium text-primary-foreground"
                   ><Zap className="h-3 w-3" /> Vender Item</button>
                   <button
-                    onClick={() => { transferItem(i.uid); toast.success("Transferência para sua conta solicitada."); }}
+                    onClick={() => transferItem(i.uid)}
                     className="flex items-center justify-center gap-1 rounded-md border py-1.5 text-xs"
                   ><Send className="h-3 w-3" /> Transferir p/ conta</button>
                 </div>

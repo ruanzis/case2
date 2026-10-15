@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as HistoricoRouteImport } from './routes/historico'
 import { Route as P2pRouteImport } from './routes/p2p'
@@ -19,6 +20,11 @@ import { Route as VendaInstantaneaRouteImport } from './routes/venda-instantanea
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -49,6 +55,7 @@ const VendaInstantaneaRoute = VendaInstantaneaRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/historico': typeof HistoricoRoute
   '/p2p': typeof P2pRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/historico': typeof HistoricoRoute
   '/p2p': typeof P2pRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/historico': typeof HistoricoRoute
   '/p2p': typeof P2pRoute
@@ -75,12 +84,26 @@ export interface FileRoutesById {
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    '/' | '/faq' | '/historico' | '/p2p' | '/saque' | '/venda-instantanea'
+    | '/'
+    | '/auth'
+    | '/faq'
+    | '/historico'
+    | '/p2p'
+    | '/saque'
+    | '/venda-instantanea'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/faq' | '/historico' | '/p2p' | '/saque' | '/venda-instantanea'
+  to:
+    | '/'
+    | '/auth'
+    | '/faq'
+    | '/historico'
+    | '/p2p'
+    | '/saque'
+    | '/venda-instantanea'
   id:
     | '__root__'
     | '/'
+    | '/auth'
     | '/faq'
     | '/historico'
     | '/p2p'
@@ -90,6 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthRoute: typeof AuthRoute
   FaqRoute: typeof FaqRoute
   HistoricoRoute: typeof HistoricoRoute
   P2pRoute: typeof P2pRoute
@@ -104,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -146,6 +177,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthRoute: AuthRoute,
   FaqRoute: FaqRoute,
   HistoricoRoute: HistoricoRoute,
   P2pRoute: P2pRoute,

@@ -1,5 +1,6 @@
-import { Link } from "@tanstack/react-router";
-import { ShoppingCart, Zap, Users, Landmark, History, X, Trash2 } from "lucide-react";
+import { Link, useNavigate } from "@tanstack/react-router";
+import { supabase } from "@/integrations/supabase/client";
+import { ShoppingCart, Zap, Users, Landmark, History, X, Trash2, LogOut } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Checkout } from "./Checkout";
 import { toast } from "sonner";
@@ -25,6 +26,7 @@ function Logo() {
 export function AppShell({ children }: { children: ReactNode }) {
   const cart = useCart();
   const [checkout, setCheckout] = useState(false);
+  const navigate = useNavigate();
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-30 flex h-14 items-center gap-6 border-b bg-background/95 px-4 backdrop-blur">
@@ -43,12 +45,19 @@ export function AppShell({ children }: { children: ReactNode }) {
               <span className="rounded-full bg-primary px-1.5 text-xs text-primary-foreground">{cart.items.length}</span>
             )}
           </button>
-          <button
-            onClick={() => toast.info("Login com Steam em breve.")}
-            className="hidden rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground sm:block"
-          >
-            Entrar com o Steam
-          </button>
+          {cart.user ? (
+            <button
+              onClick={async () => { await supabase.auth.signOut(); navigate({ to: "/", replace: true }); }}
+              className="flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm"
+              title={cart.user.email ?? ""}
+            >
+              <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">Sair</span>
+            </button>
+          ) : (
+            <Link to="/auth" className="rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground">
+              Entrar
+            </Link>
+          )}
         </div>
       </header>
 
@@ -105,7 +114,11 @@ export function AppShell({ children }: { children: ReactNode }) {
               <div className="mb-3 flex justify-between text-sm"><span>Total</span><span className="font-semibold">{brl(cart.total)}</span></div>
               <button
                 disabled={!cart.items.length}
-                onClick={() => { cart.setOpen(false); setCheckout(true); }}
+                onClick={() => {
+                  cart.setOpen(false);
+                  if (!cart.user) { toast.info("Entre na sua conta para finalizar a compra."); navigate({ to: "/auth" }); return; }
+                  setCheckout(true);
+                }}
                 className="w-full rounded-md bg-primary py-2.5 font-medium text-primary-foreground disabled:opacity-50"
               >
                 Finalizar compra
