@@ -1,6 +1,7 @@
 import { Link } from "@tanstack/react-router";
 import { ShoppingCart, Zap, Users, Landmark, History, X, Trash2 } from "lucide-react";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
+import { Checkout } from "./Checkout";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
 import { brl } from "@/lib/skins";
@@ -78,6 +79,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         ))}
       </nav>
 
+      {checkout && <Checkout onClose={() => setCheckout(false)} />}
       {cart.open && (
         <div className="fixed inset-0 z-40 flex justify-end bg-background/70" onClick={() => cart.setOpen(false)}>
           <div className="flex h-full w-full max-w-sm flex-col bg-surface p-4" onClick={(e) => e.stopPropagation()}>
@@ -102,7 +104,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <div className="mb-3 flex justify-between text-sm"><span>Total</span><span className="font-semibold">{brl(cart.total)}</span></div>
               <button
                 disabled={!cart.items.length}
-                onClick={() => toast.info("Pagamento (Pix / cartão) será ativado em breve.")}
+                onClick={() => { cart.setOpen(false); setCheckout(true); }}
                 className="w-full rounded-md bg-primary py-2.5 font-medium text-primary-foreground disabled:opacity-50"
               >
                 Finalizar compra
