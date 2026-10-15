@@ -1,6 +1,6 @@
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { supabase } from "@/integrations/supabase/client";
-import { ShoppingCart, Zap, Users, Landmark, History, X, Trash2, LogOut } from "lucide-react";
+import { ShoppingCart, Crown, Zap, Users, Landmark, History, X, Trash2, LogOut } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { Checkout } from "./Checkout";
 import { toast } from "sonner";
@@ -13,6 +13,7 @@ const tabs = [
   { to: "/p2p", label: "P2P Venda", icon: Users },
   { to: "/saque", label: "Saque", icon: Landmark },
   { to: "/historico", label: "Histórico", icon: History },
+  { to: "/assinatura", label: "Premium", icon: Crown },
 ] as const;
 
 function Logo() {
@@ -45,7 +46,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         <nav className="hidden gap-5 text-sm text-muted-foreground md:flex">
           <Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-accent" }}>Market</Link>
           <Link to="/faq" activeProps={{ className: "text-accent" }}>FAQ</Link>
-          <Link to="/assinatura" activeProps={{ className: "text-accent" }}>Assinatura</Link>
+          <Link to="/assinatura" activeProps={{ className: "text-accent" }}>Premium</Link>
         </nav>
         <div className="ml-auto flex items-center gap-3">
           <button
