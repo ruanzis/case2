@@ -39,10 +39,9 @@ export function Checkout({ onClose }: { onClose: () => void }) {
         if (r.isFinal) {
           clearInterval(t);
           if (r.status === "completed") {
-            setPaid(true);
             cart.clear();
             await cart.refresh();
-            toast.success("Pagamento confirmado!");
+            approve("Pagamento confirmado!");
           } else toast.error("Pagamento não concluído.");
         }
       } catch {}
@@ -70,10 +69,9 @@ export function Checkout({ onClose }: { onClose: () => void }) {
     setLoading(true);
     try {
       await cardPay({ data: { ids: bought.current.map((i) => i.id) } });
-      setPaid(true);
       cart.clear();
       await cart.refresh();
-      toast.success("Pagamento com cartão aprovado!");
+      approve("Pagamento com cartão aprovado!");
     } catch {
       toast.error("Não foi possível concluir o pagamento.");
     } finally {
