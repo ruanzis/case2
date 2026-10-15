@@ -11,7 +11,7 @@ export function ComingSoon({ title, text, perk }: { title: string; text: string;
         <h1 className="font-display text-3xl font-bold leading-tight">{title}</h1>
         <p className="mt-4 text-sm text-muted-foreground">{text}</p>
         <button onClick={() => toast.info("Essa função estará disponível em breve.")} className="mt-6 w-fit rounded-md bg-primary px-5 py-2.5 font-medium text-primary-foreground">
-          Entrar com o Steam
+          Negocie JÁ!
         </button>
       </div>
       <div className="flex flex-col justify-end rounded-xl bg-hero p-8">
