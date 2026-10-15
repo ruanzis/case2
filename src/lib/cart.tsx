@@ -19,7 +19,9 @@ interface CartCtx {
   transferItem: (uid: string) => void;
 }
 
-const Ctx = createContext<CartCtx | null>(null);
+// Keep a single context instance across hot reloads so provider and consumers always match.
+const g = globalThis as unknown as { __csgomoneyCartCtx?: React.Context<CartCtx | null> };
+const Ctx = (g.__csgomoneyCartCtx ??= createContext<CartCtx | null>(null));
 
 export function CartProvider({ children }: { children: ReactNode }) {
   const [items, setItems] = useState<Skin[]>([]);
