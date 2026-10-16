@@ -18,6 +18,7 @@ import { Route as P2pRouteImport } from './routes/p2p'
 import { Route as SaqueRouteImport } from './routes/saque'
 import { Route as SolicitacoesRouteImport } from './routes/solicitacoes'
 import { Route as VendaInstantaneaRouteImport } from './routes/venda-instantanea'
+import { Route as ApiPublicSteamCallbackRouteImport } from './routes/api/public/steam/callback'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,6 +65,11 @@ const VendaInstantaneaRoute = VendaInstantaneaRouteImport.update({
   path: '/venda-instantanea',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicSteamCallbackRoute = ApiPublicSteamCallbackRouteImport.update({
+  id: '/api/public/steam/callback',
+  path: '/api/public/steam/callback',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -75,6 +81,7 @@ export interface FileRoutesByFullPath {
   '/saque': typeof SaqueRoute
   '/solicitacoes': typeof SolicitacoesRoute
   '/venda-instantanea': typeof VendaInstantaneaRoute
+  '/api/public/steam/callback': typeof ApiPublicSteamCallbackRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByTo {
   '/saque': typeof SaqueRoute
   '/solicitacoes': typeof SolicitacoesRoute
   '/venda-instantanea': typeof VendaInstantaneaRoute
+  '/api/public/steam/callback': typeof ApiPublicSteamCallbackRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -98,6 +106,7 @@ export interface FileRoutesById {
   '/saque': typeof SaqueRoute
   '/solicitacoes': typeof SolicitacoesRoute
   '/venda-instantanea': typeof VendaInstantaneaRoute
+  '/api/public/steam/callback': typeof ApiPublicSteamCallbackRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -111,6 +120,7 @@ export interface FileRouteTypes {
     | '/saque'
     | '/solicitacoes'
     | '/venda-instantanea'
+    | '/api/public/steam/callback'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -122,6 +132,7 @@ export interface FileRouteTypes {
     | '/saque'
     | '/solicitacoes'
     | '/venda-instantanea'
+    | '/api/public/steam/callback'
   id:
     | '__root__'
     | '/'
@@ -133,6 +144,7 @@ export interface FileRouteTypes {
     | '/saque'
     | '/solicitacoes'
     | '/venda-instantanea'
+    | '/api/public/steam/callback'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -145,6 +157,7 @@ export interface RootRouteChildren {
   SaqueRoute: typeof SaqueRoute
   SolicitacoesRoute: typeof SolicitacoesRoute
   VendaInstantaneaRoute: typeof VendaInstantaneaRoute
+  ApiPublicSteamCallbackRoute: typeof ApiPublicSteamCallbackRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -212,6 +225,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof VendaInstantaneaRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/steam/callback': {
+      id: '/api/public/steam/callback'
+      path: '/api/public/steam/callback'
+      fullPath: '/api/public/steam/callback'
+      preLoaderRoute: typeof ApiPublicSteamCallbackRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -225,6 +245,7 @@ const rootRouteChildren: RootRouteChildren = {
   SaqueRoute: SaqueRoute,
   SolicitacoesRoute: SolicitacoesRoute,
   VendaInstantaneaRoute: VendaInstantaneaRoute,
+  ApiPublicSteamCallbackRoute: ApiPublicSteamCallbackRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
