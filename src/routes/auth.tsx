@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useCart } from "@/lib/cart";
 import { skins } from "@/lib/skins";
+import purpleBackdrop from "@/assets/auth-purple.png.asset.json";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
