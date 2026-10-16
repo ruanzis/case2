@@ -6,7 +6,7 @@ import { Checkout } from "./Checkout";
 import { SteamConnect } from "./SteamConnect";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
-import { brl } from "@/lib/skins";
+import { brl, type Skin } from "@/lib/skins";
 
 const tabs = [
   { to: "/", label: "Comprar", icon: ShoppingCart },
@@ -40,7 +40,18 @@ export function AppShell({ children }: { children: ReactNode }) {
   if (onAuth) {
     return <div className="min-h-screen p-4"><div className="mb-6 text-center"><Logo size="text-4xl sm:text-5xl" /></div>{children}</div>;
   }
+  // Group identical skins so the cart shows one row per item with quantity and subtotal.
+  const groups = cart.items.reduce<{ skin: Skin; qty: number; lastIdx: number }[]>(
+    (acc, it, idx) => {
+      const g = acc.find((x) => x.skin.id === it.id);
+      if (g) { g.qty += 1; g.lastIdx = idx; }
+      else acc.push({ skin: it, qty: 1, lastIdx: idx });
+      return acc;
+    },
+    [],
+  );
   return (
+
     <div className="min-h-screen">
       <header className="sticky top-0 z-30 flex h-14 items-center gap-6 border-b bg-background/95 px-4 backdrop-blur">
         <Logo />
@@ -114,17 +125,23 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
             <div className="flex-1 space-y-2 overflow-y-auto">
               {cart.items.length === 0 && <p className="text-sm text-muted-foreground">Seu carrinho está vazio.</p>}
-              {cart.items.map((i, idx) => (
-                <div key={idx} className="flex items-center gap-3 rounded-md bg-card p-2">
-                  <img src={i.image} alt={i.name} className="h-12 w-16 object-contain" />
+              {groups.map((g) => (
+                <div key={g.skin.id} className="flex items-center gap-3 rounded-md bg-card p-2">
+                  <img src={g.skin.image} alt={g.skin.name} className="h-12 w-16 object-contain" />
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-xs">{i.name}</p>
-                    <p className="text-sm font-semibold">{brl(i.price)}</p>
+                    <p className="truncate text-xs">{g.skin.name}</p>
+                    <p className="text-[11px] text-muted-foreground tabular-nums">
+                      {g.qty} × {brl(g.skin.price)}
+                    </p>
+                    <p className="text-sm font-semibold tabular-nums">
+                      Subtotal {brl(g.skin.price * g.qty)}
+                    </p>
                   </div>
-                  <button onClick={() => cart.removeAt(idx)} aria-label="Remover"><Trash2 className="h-4 w-4 text-muted-foreground" /></button>
+                  <button onClick={() => cart.removeAt(g.lastIdx)} aria-label="Remover uma unidade" title="Remover uma unidade"><Trash2 className="h-4 w-4 text-muted-foreground" /></button>
                 </div>
               ))}
             </div>
+
             <div className="mt-4 border-t pt-4">
               <div className="mb-3 flex justify-between text-sm"><span>Total</span><span className="font-semibold">{brl(cart.total)}</span></div>
               <button
