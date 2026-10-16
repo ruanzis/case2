@@ -41,7 +41,8 @@ export function SteamConnect() {
         setBusy(true);
         try {
           const { url } = await start({ data: { origin: window.location.origin } });
-          window.location.href = url;
+          if (window.self !== window.top) { window.open(url, "_blank", "noopener"); setBusy(false); toast.info("A Steam abriu em uma nova aba."); }
+          else window.location.href = url;
         } catch { toast.error("Não foi possível iniciar a conexão."); setBusy(false); }
       }}
       className="flex items-center gap-2 rounded-md bg-primary px-3 py-1.5 text-sm font-medium text-primary-foreground disabled:opacity-60"
