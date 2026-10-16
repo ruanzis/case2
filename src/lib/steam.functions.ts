@@ -6,6 +6,8 @@ export const startSteamLink = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((d) => z.object({ origin: z.string().url() }).parse(d))
   .handler(async ({ data, context }) => {
+    const { data: u } = await context.supabase.auth.getUser();
+    if (!u.user?.email_confirmed_at) throw new Error("EMAIL_UNVERIFIED");
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const nonce = crypto.randomUUID();
     const { error } = await supabaseAdmin.from("steam_link_states").insert({ nonce, user_id: context.userId });
