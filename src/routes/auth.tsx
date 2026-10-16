@@ -127,7 +127,7 @@ function AuthPage() {
                 <p className="text-xs text-muted-foreground">Mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo.</p>
               </>
             )}
-            <button disabled={loading} className="w-full rounded-md bg-primary py-2.5 font-medium text-primary-foreground disabled:opacity-50">
+            <button disabled={loading} onClick={() => playTap()} className="w-full rounded-md bg-primary py-2.5 font-medium text-primary-foreground disabled:opacity-50">
               {loading ? "Aguarde..." : mode === "in" ? "Entrar" : "Criar conta"}
             </button>
           </form>
