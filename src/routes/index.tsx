@@ -4,22 +4,19 @@ import { Search, Zap } from "lucide-react";
 import { SkinCard } from "@/components/SkinCard";
 import { skins, INSTANT_COUNT, type Category } from "@/lib/skins";
 import { cn } from "@/lib/utils";
-import coverAsset from "@/assets/og-cover.png.asset.json";
-
-const SITE = "https://csgomoney.lovable.app";
-const COVER = `${SITE}${coverAsset.url}`;
+import { OG_COVER } from "@/lib/og";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "csgomoney.site — Comprar skins de CS2" },
-      { name: "description", content: "Compre skins de CS2 com entrega instantânea e pagamento seguro." },
+      { name: "description", content: "Market de skins de CS2 com entrega instantânea." },
       { property: "og:title", content: "csgomoney.site — Comprar skins de CS2" },
       { property: "og:description", content: "Market de skins de CS2 com entrega instantânea." },
       { property: "og:type", content: "website" },
-      { property: "og:image", content: COVER },
+      { property: "og:image", content: OG_COVER },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:image", content: COVER },
+      { name: "twitter:image", content: OG_COVER },
     ],
   }),
   component: Market,

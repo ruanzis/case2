@@ -9,16 +9,19 @@ import { playTap } from "@/lib/tap-sound";
 import { skins } from "@/lib/skins";
 import purpleBackdrop from "@/assets/auth-purple.png.asset.json";
 import streaks from "@/assets/auth-streaks.png.asset.json";
+import { OG_COVER } from "@/lib/og";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
       { title: "Entrar ou criar conta — csgomoney.site" },
-      { name: "description", content: "Crie sua conta no csgomoney.site para guardar suas compras e seu histórico." },
-      { property: "og:title", content: "Entrar — csgomoney.site" },
-      { property: "og:description", content: "Acesse sua conta no csgomoney.site." },
+      { name: "description", content: "Market de skins de CS2 com entrega instantânea." },
+      { property: "og:title", content: "csgomoney.site — Comprar skins de CS2" },
+      { property: "og:description", content: "Market de skins de CS2 com entrega instantânea." },
       { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
+      { property: "og:image", content: OG_COVER },
+      { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:image", content: OG_COVER },
     ],
   }),
   component: AuthPage,
