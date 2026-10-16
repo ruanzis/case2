@@ -16,9 +16,9 @@ const tabs = [
   { to: "/assinatura", label: "Premium", icon: Crown },
 ] as const;
 
-function Logo() {
+function Logo({ size = "text-xl" }: { size?: string }) {
   return (
-    <Link to="/" className="font-display text-xl font-bold tracking-tight">
+    <Link to="/" className={`font-display ${size} font-bold tracking-tight`}>
       case<span className="text-primary">2.com.br</span>
     </Link>
   );
@@ -37,7 +37,7 @@ export function AppShell({ children }: { children: ReactNode }) {
     return <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">Carregando...</div>;
   }
   if (onAuth) {
-    return <div className="min-h-screen p-4"><div className="mb-6 text-center"><Logo /></div>{children}</div>;
+    return <div className="min-h-screen p-4"><div className="mb-6 text-center"><Logo size="text-4xl sm:text-5xl" /></div>{children}</div>;
   }
   return (
     <div className="min-h-screen">
