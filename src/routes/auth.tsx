@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useCart } from "@/lib/cart";
+import { playTap } from "@/lib/tap-sound";
 import { skins } from "@/lib/skins";
 import purpleBackdrop from "@/assets/auth-purple.png.asset.json";
 import streaks from "@/assets/auth-streaks.png.asset.json";
@@ -126,7 +127,7 @@ function AuthPage() {
                 <p className="text-xs text-muted-foreground">Mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo.</p>
               </>
             )}
-            <button disabled={loading} className="w-full rounded-md bg-primary py-2.5 font-medium text-primary-foreground disabled:opacity-50">
+            <button disabled={loading} onClick={() => playTap()} className="w-full rounded-md bg-primary py-2.5 font-medium text-primary-foreground disabled:opacity-50">
               {loading ? "Aguarde..." : mode === "in" ? "Entrar" : "Criar conta"}
             </button>
           </form>
