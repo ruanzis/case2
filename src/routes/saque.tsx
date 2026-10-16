@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useServerFn } from "@tanstack/react-start";
 import { requestWithdrawal } from "@/lib/withdraw.functions";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/saque")({
   head: () => ({
@@ -78,7 +79,24 @@ function SaquePage() {
     } catch { /* ignore */ }
   }, []);
 
+  const [removing, setRemoving] = useState(false);
+  const [pwd, setPwd] = useState("");
+  const [checking, setChecking] = useState(false);
+
+  const removeAccount = async () => {
+    const email = cart.user?.email;
+    if (!email) { toast.error("Entre na sua conta primeiro"); return; }
+    setChecking(true);
+    const { error } = await supabase.auth.signInWithPassword({ email, password: pwd });
+    setChecking(false);
+    if (error) { toast.error("Senha incorreta"); return; }
+    localStorage.removeItem(STORE);
+    setSaved(null); setKey(""); setPwd(""); setRemoving(false);
+    toast.success("Conta Pix removida");
+  };
+
   const register = () => {
+    if (saved) { toast.error("Já existe uma conta Pix cadastrada. Remova-a para cadastrar outra."); return; }
     if (!type || type === "Inválida") { toast.error("Chave Pix inválida"); return; }
     const acc = { key: key.trim(), type };
     setSaved(acc);
@@ -105,7 +123,7 @@ function SaquePage() {
           <Input value={key} onChange={(e) => setKey(e.target.value)} placeholder="Digite sua chave Pix" />
           {type && <p className="mt-1 text-xs text-muted-foreground">Tipo detectado: <b>{type}</b></p>}
         </div>
-        <Button className="w-full" onClick={register}>Cadastrar conta</Button>
+        <Button className="w-full" onClick={register} disabled={!!saved}>{saved ? "Conta já cadastrada" : "Cadastrar conta"}</Button>
       </div>
 
       {saved && (
@@ -114,7 +132,18 @@ function SaquePage() {
             <p className="text-sm">Chave {saved.type}: <b>{saved.key}</b></p>
             <span className="rounded-full bg-success/20 px-2 py-0.5 text-xs font-semibold text-success">✓ Conta cadastrada</span>
           </div>
-          <button className="text-xs text-muted-foreground underline" onClick={() => { localStorage.removeItem(STORE); setSaved(null); setKey(""); }}>Remover conta</button>
+          {!removing ? (
+            <button className="text-xs text-muted-foreground underline" onClick={() => setRemoving(true)}>Remover conta</button>
+          ) : (
+            <div className="space-y-2 rounded-lg border border-border p-3">
+              <p className="text-xs text-muted-foreground">Digite a senha da sua conta do site para remover a chave Pix.</p>
+              <Input type="password" value={pwd} onChange={(e) => setPwd(e.target.value)} placeholder="Senha da conta" />
+              <div className="flex gap-2">
+                <Button size="sm" variant="destructive" disabled={checking || !pwd} onClick={removeAccount}>{checking ? "Verificando..." : "Confirmar remoção"}</Button>
+                <Button size="sm" variant="ghost" onClick={() => { setRemoving(false); setPwd(""); }}>Cancelar</Button>
+              </div>
+            </div>
+          )}
           <Button
             className="w-full"
             disabled={cart.balance <= 0 || sending}
