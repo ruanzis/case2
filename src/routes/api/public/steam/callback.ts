@@ -27,7 +27,7 @@ export const Route = createFileRoute("/api/public/steam/callback")({
         const { data: st } = await supabaseAdmin.from("steam_link_states").select("user_id, created_at").eq("nonce", state).maybeSingle();
         await supabaseAdmin.from("steam_link_states").delete().eq("nonce", state);
         if (!st || Date.now() - new Date(st.created_at).getTime() > 15 * 60 * 1000) return back("error");
-        const { error } = await supabaseAdmin.from("steam_accounts").upsert({ user_id: st.user_id, steam_id: m[1] });
+        const { error } = await supabaseAdmin.from("steam_accounts").upsert({ user_id: st.user_id, steam_id: m[1] as string });
         return back(error ? "error" : "ok");
       },
     },
