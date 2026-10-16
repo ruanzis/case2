@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
 import { useCart } from "@/lib/cart";
+import { playTap } from "@/lib/tap-sound";
 import { skins } from "@/lib/skins";
 import purpleBackdrop from "@/assets/auth-purple.png.asset.json";
 import streaks from "@/assets/auth-streaks.png.asset.json";
