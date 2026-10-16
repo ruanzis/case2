@@ -123,7 +123,7 @@ function SaquePage() {
           <Input value={key} onChange={(e) => setKey(e.target.value)} placeholder="Digite sua chave Pix" />
           {type && <p className="mt-1 text-xs text-muted-foreground">Tipo detectado: <b>{type}</b></p>}
         </div>
-        <Button className="w-full" onClick={register}>Cadastrar conta</Button>
+        <Button className="w-full" onClick={register} disabled={!!saved}>{saved ? "Conta já cadastrada" : "Cadastrar conta"}</Button>
       </div>
 
       {saved && (
