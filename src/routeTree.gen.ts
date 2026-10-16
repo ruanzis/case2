@@ -14,6 +14,7 @@ import { Route as AssinaturaRouteImport } from './routes/assinatura'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as HistoricoRouteImport } from './routes/historico'
+import { Route as InicioRouteImport } from './routes/inicio'
 import { Route as P2pRouteImport } from './routes/p2p'
 import { Route as SaqueRouteImport } from './routes/saque'
 import { Route as SolicitacoesRouteImport } from './routes/solicitacoes'
@@ -43,6 +44,11 @@ const FaqRoute = FaqRouteImport.update({
 const HistoricoRoute = HistoricoRouteImport.update({
   id: '/historico',
   path: '/historico',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InicioRoute = InicioRouteImport.update({
+  id: '/inicio',
+  path: '/inicio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const P2pRoute = P2pRouteImport.update({
@@ -77,6 +83,7 @@ export interface FileRoutesByFullPath {
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/historico': typeof HistoricoRoute
+  '/inicio': typeof InicioRoute
   '/p2p': typeof P2pRoute
   '/saque': typeof SaqueRoute
   '/solicitacoes': typeof SolicitacoesRoute
@@ -89,6 +96,7 @@ export interface FileRoutesByTo {
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/historico': typeof HistoricoRoute
+  '/inicio': typeof InicioRoute
   '/p2p': typeof P2pRoute
   '/saque': typeof SaqueRoute
   '/solicitacoes': typeof SolicitacoesRoute
@@ -102,6 +110,7 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/historico': typeof HistoricoRoute
+  '/inicio': typeof InicioRoute
   '/p2p': typeof P2pRoute
   '/saque': typeof SaqueRoute
   '/solicitacoes': typeof SolicitacoesRoute
@@ -116,6 +125,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/faq'
     | '/historico'
+    | '/inicio'
     | '/p2p'
     | '/saque'
     | '/solicitacoes'
@@ -128,6 +138,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/faq'
     | '/historico'
+    | '/inicio'
     | '/p2p'
     | '/saque'
     | '/solicitacoes'
@@ -140,6 +151,7 @@ export interface FileRouteTypes {
     | '/auth'
     | '/faq'
     | '/historico'
+    | '/inicio'
     | '/p2p'
     | '/saque'
     | '/solicitacoes'
@@ -153,6 +165,7 @@ export interface RootRouteChildren {
   AuthRoute: typeof AuthRoute
   FaqRoute: typeof FaqRoute
   HistoricoRoute: typeof HistoricoRoute
+  InicioRoute: typeof InicioRoute
   P2pRoute: typeof P2pRoute
   SaqueRoute: typeof SaqueRoute
   SolicitacoesRoute: typeof SolicitacoesRoute
@@ -195,6 +208,13 @@ declare module '@tanstack/react-router' {
       path: '/historico'
       fullPath: '/historico'
       preLoaderRoute: typeof HistoricoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/inicio': {
+      id: '/inicio'
+      path: '/inicio'
+      fullPath: '/inicio'
+      preLoaderRoute: typeof InicioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/p2p': {
@@ -241,6 +261,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthRoute: AuthRoute,
   FaqRoute: FaqRoute,
   HistoricoRoute: HistoricoRoute,
+  InicioRoute: InicioRoute,
   P2pRoute: P2pRoute,
   SaqueRoute: SaqueRoute,
   SolicitacoesRoute: SolicitacoesRoute,
