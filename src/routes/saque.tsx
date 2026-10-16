@@ -8,6 +8,9 @@ import { Input } from "@/components/ui/input";
 import { useServerFn } from "@tanstack/react-start";
 import { requestWithdrawal } from "@/lib/withdraw.functions";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable/index";
+
+const PENDING = "csgomoney-pix-remove-pending";
 
 export const Route = createFileRoute("/saque")({
   head: () => ({
@@ -95,6 +98,32 @@ function SaquePage() {
     toast.success("Conta Pix removida");
   };
 
+  const isGoogle = !!cart.user && (cart.user.app_metadata?.provider === "google" ||
+    (cart.user.identities ?? []).some((i: { provider: string }) => i.provider === "google")) &&
+    !(cart.user.identities ?? []).some((i: { provider: string }) => i.provider === "email");
+
+  const confirmWithGoogle = async () => {
+    try { sessionStorage.setItem(PENDING, String(Date.now())); } catch { /* ignore */ }
+    const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: `${window.location.origin}/saque` });
+    if (r?.error) { sessionStorage.removeItem(PENDING); toast.error("Não foi possível confirmar com o Google"); }
+  };
+
+  useEffect(() => {
+    if (!cart.user) return;
+    let ts = 0;
+    try { ts = Number(sessionStorage.getItem(PENDING) || 0); } catch { /* ignore */ }
+    if (!ts) return;
+    try { sessionStorage.removeItem(PENDING); } catch { /* ignore */ }
+    const last = cart.user.last_sign_in_at ? new Date(cart.user.last_sign_in_at).getTime() : 0;
+    if (Date.now() - ts < 10 * 60 * 1000 && last >= ts - 5000) {
+      localStorage.removeItem(STORE);
+      setSaved(null); setKey(""); setRemoving(false);
+      toast.success("Identidade confirmada. Conta Pix removida");
+    } else {
+      toast.error("Confirmação com o Google não concluída");
+    }
+  }, [cart.user]);
+
   const register = () => {
     if (saved) { toast.error("Já existe uma conta Pix cadastrada. Remova-a para cadastrar outra."); return; }
     if (!type || type === "Inválida") { toast.error("Chave Pix inválida"); return; }
@@ -136,10 +165,20 @@ function SaquePage() {
             <button className="text-xs text-muted-foreground underline" onClick={() => setRemoving(true)}>Remover conta</button>
           ) : (
             <div className="space-y-2 rounded-lg border border-border p-3">
-              <p className="text-xs text-muted-foreground">Digite a senha da sua conta do site para remover a chave Pix.</p>
-              <Input type="password" value={pwd} onChange={(e) => setPwd(e.target.value)} placeholder="Senha da conta" />
+              {isGoogle ? (
+                <p className="text-xs text-muted-foreground">Você entrou pelo Google. Confirme sua identidade com o Google para remover a chave Pix.</p>
+              ) : (
+                <>
+                  <p className="text-xs text-muted-foreground">Digite a senha da sua conta do site para remover a chave Pix.</p>
+                  <Input type="password" value={pwd} onChange={(e) => setPwd(e.target.value)} placeholder="Senha da conta" />
+                </>
+              )}
               <div className="flex gap-2">
-                <Button size="sm" variant="destructive" disabled={checking || !pwd} onClick={removeAccount}>{checking ? "Verificando..." : "Confirmar remoção"}</Button>
+                {isGoogle ? (
+                  <Button size="sm" variant="destructive" onClick={confirmWithGoogle}>Confirmar com o Google</Button>
+                ) : (
+                  <Button size="sm" variant="destructive" disabled={checking || !pwd} onClick={removeAccount}>{checking ? "Verificando..." : "Confirmar remoção"}</Button>
+                )}
                 <Button size="sm" variant="ghost" onClick={() => { setRemoving(false); setPwd(""); }}>Cancelar</Button>
               </div>
             </div>
