@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AssinaturaRouteImport } from './routes/assinatura'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as HistoricoRouteImport } from './routes/historico'
 import { Route as InicioRouteImport } from './routes/inicio'
@@ -28,6 +29,11 @@ const IndexRoute = IndexRouteImport.update({
 const AssinaturaRoute = AssinaturaRouteImport.update({
   id: '/assinatura',
   path: '/assinatura',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -74,6 +80,7 @@ const ApiPublicSteamCallbackRoute = ApiPublicSteamCallbackRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
+  '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/historico': typeof HistoricoRoute
   '/inicio': typeof InicioRoute
@@ -86,6 +93,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
+  '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/historico': typeof HistoricoRoute
   '/inicio': typeof InicioRoute
@@ -99,6 +107,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/assinatura': typeof AssinaturaRoute
+  '/auth': typeof AuthRoute
   '/faq': typeof FaqRoute
   '/historico': typeof HistoricoRoute
   '/inicio': typeof InicioRoute
@@ -113,6 +122,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/assinatura'
+    | '/auth'
     | '/faq'
     | '/historico'
     | '/inicio'
@@ -125,6 +135,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/assinatura'
+    | '/auth'
     | '/faq'
     | '/historico'
     | '/inicio'
@@ -137,6 +148,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/assinatura'
+    | '/auth'
     | '/faq'
     | '/historico'
     | '/inicio'
@@ -150,6 +162,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AssinaturaRoute: typeof AssinaturaRoute
+  AuthRoute: typeof AuthRoute
   FaqRoute: typeof FaqRoute
   HistoricoRoute: typeof HistoricoRoute
   InicioRoute: typeof InicioRoute
@@ -174,6 +187,13 @@ declare module '@tanstack/react-router' {
       path: '/assinatura'
       fullPath: '/assinatura'
       preLoaderRoute: typeof AssinaturaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -238,6 +258,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AssinaturaRoute: AssinaturaRoute,
+  AuthRoute: AuthRoute,
   FaqRoute: FaqRoute,
   HistoricoRoute: HistoricoRoute,
   InicioRoute: InicioRoute,
