@@ -9,6 +9,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { requestWithdrawal } from "@/lib/withdraw.functions";
 import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable/index";
+import { getPixAccount, savePixAccount, deletePixAccount } from "@/lib/pix-account.functions";
 
 const PENDING = "csgomoney-pix-remove-pending";
 
@@ -65,8 +66,6 @@ function detectKey(raw: string): string {
   return "Inválida";
 }
 
-const STORE = "csgomoney-pix-account";
-
 function SaquePage() {
   const cart = useCart();
   const [key, setKey] = useState("");
@@ -74,13 +73,16 @@ function SaquePage() {
   const type = detectKey(key);
   const send = useServerFn(requestWithdrawal);
   const [sending, setSending] = useState(false);
+  const getPix = useServerFn(getPixAccount);
+  const savePix = useServerFn(savePixAccount);
+  const delPix = useServerFn(deletePixAccount);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem(STORE);
-      if (raw) setSaved(JSON.parse(raw));
-    } catch { /* ignore */ }
-  }, []);
+    if (!cart.authReady) return;
+    let alive = true;
+    getPix().then((acc) => { if (alive) setSaved(acc); }).catch(() => {});
+    return () => { alive = false; };
+  }, [cart.authReady]);
 
   const [removing, setRemoving] = useState(false);
   const [pwd, setPwd] = useState("");
@@ -93,7 +95,7 @@ function SaquePage() {
     const { error } = await supabase.auth.signInWithPassword({ email, password: pwd });
     setChecking(false);
     if (error) { toast.error("Senha incorreta"); return; }
-    localStorage.removeItem(STORE);
+    try { await delPix(); } catch { toast.error("Não foi possível remover a conta Pix"); return; }
     setSaved(null); setKey(""); setPwd(""); setRemoving(false);
     toast.success("Conta Pix removida");
   };
@@ -116,21 +118,23 @@ function SaquePage() {
     try { sessionStorage.removeItem(PENDING); } catch { /* ignore */ }
     const last = cart.user.last_sign_in_at ? new Date(cart.user.last_sign_in_at).getTime() : 0;
     if (Date.now() - ts < 10 * 60 * 1000 && last >= ts - 5000) {
-      localStorage.removeItem(STORE);
-      setSaved(null); setKey(""); setRemoving(false);
-      toast.success("Identidade confirmada. Conta Pix removida");
+      delPix().then(() => {
+        setSaved(null); setKey(""); setRemoving(false);
+        toast.success("Identidade confirmada. Conta Pix removida");
+      }).catch(() => toast.error("Não foi possível remover a conta Pix"));
     } else {
       toast.error("Confirmação com o Google não concluída");
     }
   }, [cart.user]);
 
-  const register = () => {
+  const register = async () => {
     if (saved) { toast.error("Já existe uma conta Pix cadastrada. Remova-a para cadastrar outra."); return; }
     if (!type || type === "Inválida") { toast.error("Chave Pix inválida"); return; }
-    const acc = { key: key.trim(), type };
-    setSaved(acc);
-    try { localStorage.setItem(STORE, JSON.stringify(acc)); } catch { /* ignore */ }
-    toast.success("Conta Pix cadastrada");
+    try {
+      await savePix({ data: { pixKey: key.trim(), pixType: type } });
+      setSaved({ key: key.trim(), type });
+      toast.success("Conta Pix cadastrada");
+    } catch (e) { toast.error(e instanceof Error ? e.message : "Erro"); }
   };
 
   return (
