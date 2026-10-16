@@ -85,9 +85,9 @@ function AuthPage() {
   const input = "w-full rounded-md border bg-card px-3 py-2.5 text-sm outline-none focus:border-primary";
 
   return (
-    <div className="relative overflow-hidden rounded-xl py-10">
+    <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden rounded-xl">
       <SkinsBackdrop />
-    <div className="relative mx-auto max-w-sm rounded-xl border bg-surface/90 p-6 shadow-2xl backdrop-blur-md">
+      <div className="relative mx-auto w-full max-w-sm rounded-xl border bg-surface/90 p-6 shadow-2xl backdrop-blur-md">
       {sent ? (
         <div className="text-center">
           <h1 className="font-display text-xl font-bold">Confirme seu e-mail</h1>
