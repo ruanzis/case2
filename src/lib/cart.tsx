@@ -10,6 +10,9 @@ export interface HistoryEntry { uid: string; name: string; image: string; price:
 interface CartCtx {
   items: Skin[];
   toggle: (s: Skin) => void;
+  add: (s: Skin, qty: number) => void;
+  removeAt: (i: number) => void;
+  count: (id: string) => number;
   has: (id: string) => boolean;
   clear: () => void;
   total: number;
@@ -68,10 +71,18 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const toggle = (s: Skin) =>
     setItems((cur) => (cur.some((i) => i.id === s.id) ? cur.filter((i) => i.id !== s.id) : [...cur, s]));
 
+  const add = (s: Skin, qty: number) =>
+    setItems((cur) => {
+      const n = Math.max(0, Math.min(qty, 10 - cur.filter((i) => i.id === s.id).length));
+      return [...cur, ...Array.from({ length: n }, () => s)];
+    });
+  const removeAt = (idx: number) => setItems((cur) => cur.filter((_, i) => i !== idx));
+
   return (
     <Ctx.Provider
       value={{
-        items, toggle,
+        items, toggle, add, removeAt,
+        count: (id) => items.filter((i) => i.id === id).length,
         has: (id) => items.some((i) => i.id === id),
         clear: () => setItems([]),
         total: items.reduce((a, b) => a + b.price, 0),
