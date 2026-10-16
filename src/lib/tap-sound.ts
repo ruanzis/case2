@@ -25,7 +25,7 @@ function noiseBuffer(c: AudioContext) {
 }
 
 /** Toque suave: clique curto + corpo grave + brilho de vidro + eco. */
-export function playTap() {
+export function playTap(soft = false) {
   const c = ensure();
   if (!c) return;
   const t = c.currentTime + 0.001;
@@ -38,7 +38,7 @@ export function playTap() {
   out.connect(c.destination);
 
   const bus = c.createGain();
-  bus.gain.value = 0.9;
+  bus.gain.value = soft ? 0.65 : 0.9;
   bus.connect(out);
 
   // Rabinho de eco — é o que deixa o toque gostoso de repetir.
@@ -48,12 +48,12 @@ export function playTap() {
   fb.gain.value = 0.32;
   const damp = c.createBiquadFilter();
   damp.type = "lowpass";
-  damp.frequency.value = 2600;
+  damp.frequency.value = soft ? 1700 : 2600;
   echo.connect(damp);
   damp.connect(fb);
   fb.connect(echo);
   const wet = c.createGain();
-  wet.gain.value = 0.45;
+  wet.gain.value = soft ? 0.6 : 0.45;
   damp.connect(wet);
   wet.connect(bus);
 
@@ -66,11 +66,11 @@ export function playTap() {
   click.playbackRate.value = 0.9 + Math.random() * 0.3;
   const bp = c.createBiquadFilter();
   bp.type = "bandpass";
-  bp.frequency.value = 2100 * jitter;
+  bp.frequency.value = (soft ? 1450 : 2100) * jitter;
   bp.Q.value = 0.9;
   const cg = c.createGain();
   cg.gain.setValueAtTime(0.0001, t);
-  cg.gain.exponentialRampToValueAtTime(0.5, t + 0.004);
+  cg.gain.exponentialRampToValueAtTime(soft ? 0.2 : 0.5, t + 0.004);
   cg.gain.exponentialRampToValueAtTime(0.0001, t + 0.07);
   click.connect(bp);
   bp.connect(cg);
@@ -81,11 +81,11 @@ export function playTap() {
   // 2. Corpo quente que desce.
   const body = c.createOscillator();
   body.type = "sine";
-  body.frequency.setValueAtTime(360 * jitter, t);
+  body.frequency.setValueAtTime((soft ? 300 : 360) * jitter, t);
   body.frequency.exponentialRampToValueAtTime(150, t + 0.12);
   const bg = c.createGain();
   bg.gain.setValueAtTime(0.0001, t);
-  bg.gain.exponentialRampToValueAtTime(0.28, t + 0.008);
+  bg.gain.exponentialRampToValueAtTime(soft ? 0.12 : 0.28, t + 0.008);
   bg.gain.exponentialRampToValueAtTime(0.0001, t + 0.22);
   body.connect(bg);
   bg.connect(bus);
@@ -99,7 +99,7 @@ export function playTap() {
   glass.frequency.value = 1420 * jitter;
   const gg = c.createGain();
   gg.gain.setValueAtTime(0.0001, t);
-  gg.gain.exponentialRampToValueAtTime(0.1, t + 0.006);
+  gg.gain.exponentialRampToValueAtTime(soft ? 0.04 : 0.1, t + 0.006);
   gg.gain.exponentialRampToValueAtTime(0.0001, t + 0.16);
   glass.connect(gg);
   gg.connect(bus);
@@ -116,7 +116,7 @@ export function playTap() {
   hp.frequency.value = 4200;
   const ag = c.createGain();
   ag.gain.setValueAtTime(0.0001, t + 0.002);
-  ag.gain.exponentialRampToValueAtTime(0.06, t + 0.02);
+  ag.gain.exponentialRampToValueAtTime(soft ? 0.025 : 0.06, t + 0.02);
   ag.gain.exponentialRampToValueAtTime(0.0001, t + 0.13);
   air.connect(hp);
   hp.connect(ag);
