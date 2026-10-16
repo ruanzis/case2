@@ -52,8 +52,8 @@ function Assinatura() {
       <div className="space-y-2 text-sm">
         <p className="font-medium">O que você recebe:</p>
         <p className="flex gap-2"><Check className="h-4 w-4 text-success" /> Negocie skins quando quiser.</p>
-        <p className="flex gap-2"><Check className="h-4 w-4 text-success" /> Veja skins em tempo real antes do lançamento.</p>
-        <p className="flex gap-2"><Check className="h-4 w-4 text-success" /> O acesso fica ligado à sua conta, em qualquer aparelho.</p>
+        <p className="flex gap-2"><Check className="h-4 w-4 text-success" /> Solicite saques em Pix nacional.</p>
+        <p className="flex gap-2"><Check className="h-4 w-4 text-success" /> Ganhe +2 Case semanais gratuitamente</p>
       </div>
       <p className="rounded-md bg-secondary p-3 text-xs text-muted-foreground">
         Esta assinatura Premium libera os benefícios acima. Ela não tem relação com saque, não libera saldo e não é exigida para sacar.
