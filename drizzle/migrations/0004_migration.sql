@@ -1,0 +1,1 @@
+DELETE FROM public.pix_accounts WHERE pix_key = '71996225521';
