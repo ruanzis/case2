@@ -30,7 +30,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const [checkout, setCheckout] = useState(false);
   const navigate = useNavigate();
   const pathname = useRouterState({ select: (r) => r.location.pathname });
-  const onAuth = pathname === "/auth";
+  const onAuth = pathname === "/inicio";
   useEffect(() => {
     if (cart.authReady && !cart.user && !onAuth) navigate({ to: "/auth", replace: true });
   }, [cart.authReady, cart.user, onAuth, navigate]);
@@ -69,7 +69,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               <LogOut className="h-4 w-4" /> <span className="hidden sm:inline">Sair</span>
             </button>
           ) : (
-            <Link to="/auth" className="rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground">
+            <Link to="/inicio" className="rounded-md bg-primary px-4 py-1.5 text-sm font-medium text-primary-foreground">
               Entrar
             </Link>
           )}
@@ -131,7 +131,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                 disabled={!cart.items.length}
                 onClick={() => {
                   cart.setOpen(false);
-                  if (!cart.user) { toast.info("Entre na sua conta para finalizar a compra."); navigate({ to: "/auth" }); return; }
+                  if (!cart.user) { toast.info("Entre na sua conta para finalizar a compra."); navigate({ to: "/inicio" }); return; }
                   setCheckout(true);
                 }}
                 className="w-full rounded-md bg-primary py-2.5 font-medium text-primary-foreground disabled:opacity-50"

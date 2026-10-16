@@ -11,7 +11,7 @@ import purpleBackdrop from "@/assets/auth-purple.png.asset.json";
 import streaks from "@/assets/auth-streaks.png.asset.json";
 import { OG_COVER } from "@/lib/og";
 
-export const Route = createFileRoute("/auth")({
+export const Route = createFileRoute("/inicio")({
   head: () => ({
     meta: [
       { title: "Entrar ou criar conta — csgomoney.site" },
