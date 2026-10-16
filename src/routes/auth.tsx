@@ -85,9 +85,9 @@ function AuthPage() {
   const input = "w-full rounded-md border bg-card px-3 py-2.5 text-sm outline-none focus:border-primary";
 
   return (
-    <div className="relative overflow-hidden rounded-xl py-10">
+    <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden rounded-xl">
       <SkinsBackdrop />
-    <div className="relative mx-auto max-w-sm rounded-xl border bg-surface/90 p-6 shadow-2xl backdrop-blur-md">
+      <div className="relative mx-auto w-full max-w-sm rounded-xl border bg-surface/90 p-6 shadow-2xl backdrop-blur-md">
       {sent ? (
         <div className="text-center">
           <h1 className="font-display text-xl font-bold">Confirme seu e-mail</h1>
@@ -126,16 +126,16 @@ const imgs = Array.from(new Map(skins.map((s) => [s.image, s])).values());
 
 function SkinsBackdrop() {
   const row = (rev: boolean) => (
-    <div className={`flex w-max gap-6 ${rev ? "animate-marquee-rev" : "animate-marquee"}`}>
+    <div className={`flex w-max gap-8 ${rev ? "animate-marquee-rev" : "animate-marquee"}`}>
       {[...imgs, ...imgs].map((s, i) => (
-        <div key={i} className="flex h-28 w-40 shrink-0 items-center justify-center rounded-lg bg-card/60 p-3">
-          <img src={s.image} alt="" className="max-h-full max-w-full object-contain" />
+        <div key={i} className="flex h-44 w-64 shrink-0 items-center justify-center rounded-xl bg-card/60 p-4 shadow-lg">
+          <img src={s.image} alt="" className="max-h-full max-w-full object-contain drop-shadow-[0_0_12px_rgba(168,85,247,0.45)]" />
         </div>
       ))}
     </div>
   );
   return (
-    <div aria-hidden className="pointer-events-none absolute inset-0 flex flex-col justify-center gap-6 opacity-40">
+    <div aria-hidden className="pointer-events-none absolute inset-0 flex h-full flex-col justify-evenly gap-8 opacity-70">
       {row(false)}
       <img src={purpleBackdrop.url} alt="" className="absolute inset-0 h-full w-full object-cover opacity-50" />
       {row(true)}
