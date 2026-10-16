@@ -40,8 +40,13 @@ function AuthPage() {
   const [form, setForm] = useState({ email: "", password: "", confirm: "" });
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [remember, setRemember] = useState(false);
+  useEffect(() => {
+    const saved = localStorage.getItem("csgomoney-remember-email");
+    if (saved) { setRemember(true); setForm((f) => ({ ...f, email: saved })); }
+  }, []);
 
-  useEffect(() => { if (user) navigate({ to: "/venda-instantanea", replace: true }); }, [user, navigate]);
+  useEffect(() => { if (user) navigate({ to: "/", replace: true }); }, [user, navigate]);
 
   const submit = async (e: React.FormEvent): Promise<unknown> => {
     e.preventDefault();
@@ -63,6 +68,8 @@ function AuthPage() {
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email: em.data, password: form.password });
         if (error) throw error;
+        if (remember) localStorage.setItem("csgomoney-remember-email", em.data);
+        else localStorage.removeItem("csgomoney-remember-email");
         toast.success("Bem-vindo de volta!");
       }
     } catch (err) {
@@ -107,6 +114,12 @@ function AuthPage() {
           <form onSubmit={submit} className="space-y-3">
             <input className={input} type="email" placeholder="E-mail" autoComplete="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
             <input className={input} type="password" placeholder="Senha" autoComplete={mode === "in" ? "current-password" : "new-password"} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} />
+            {mode === "in" && (
+              <label className="flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+                <input type="checkbox" className="h-4 w-4 accent-primary" checked={remember} onChange={(e) => setRemember(e.target.checked)} />
+                Lembrar usuário
+              </label>
+            )}
             {mode === "up" && (
               <>
                 <input className={input} type="password" placeholder="Confirmar senha" autoComplete="new-password" value={form.confirm} onChange={(e) => setForm({ ...form, confirm: e.target.value })} />
