@@ -87,4 +87,4 @@
 @keyframes streaks { 0% { transform: translateX(0) scale(1.3); } 50% { transform: translateX(-30%) scale(1.3); } 100% { transform: translateX(0) scale(1.3); } }
 @keyframes streaks-glow { 0%,100% { opacity: .55; } 50% { opacity: .9; } }
 @utility animate-streaks { animation: streaks 14s ease-in-out infinite, streaks-glow 4s ease-in-out infinite; }
-@utility font-delicate { font-family: "Cormorant Garamond", serif; font-style: italic; }
+@utility font-delicate { font-family: "Figtree", var(--font-sans); font-style: italic; letter-spacing: 0.01em; }

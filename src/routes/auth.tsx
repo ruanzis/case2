@@ -101,7 +101,7 @@ function AuthPage() {
         <>
           <div className="mb-1 flex items-baseline gap-3">
             <h1 className="font-display text-2xl font-bold">{mode === "in" ? "Entrar" : "Criar conta"}</h1>
-            <span className="font-delicate text-lg text-primary">Vendas de skins CS2</span>
+            <span className="font-delicate text-base font-medium text-primary">Vendas de skins CS2</span>
           </div>
           <p className="mb-5 text-sm text-muted-foreground">Para acessar o site é preciso se registrar. Suas compras e histórico ficam salvos na conta.</p>
           <form onSubmit={submit} className="space-y-3">
