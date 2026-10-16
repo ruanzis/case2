@@ -2,9 +2,9 @@
 
 ## Concluído
 - [x] Capa de apresentação nova (banner AK-47 roxo) + descrição "Market de skins de CS2 com entrega instantânea." em / e /auth
+- [x] Renomeado /auth → /inicio (links do topo, botão de compra e prompt de login atualizados; /auth redireciona para /inicio)
 
 ## Em aberto
-- [ ] Renomear endereço do login: /auth → /inicio (inclui links do topo, botão de compra e prompt de login; manter /auth funcionando como redirecionamento para links já compartilhados)
 - [ ] Confirmar com o usuário quais outros endereços das abas ele quer renomear
 - [ ] Publicar o site depois dos renomeios
 
