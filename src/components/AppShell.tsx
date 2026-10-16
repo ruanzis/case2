@@ -114,14 +114,14 @@ export function AppShell({ children }: { children: ReactNode }) {
             </div>
             <div className="flex-1 space-y-2 overflow-y-auto">
               {cart.items.length === 0 && <p className="text-sm text-muted-foreground">Seu carrinho está vazio.</p>}
-              {cart.items.map((i) => (
-                <div key={i.id} className="flex items-center gap-3 rounded-md bg-card p-2">
+              {cart.items.map((i, idx) => (
+                <div key={idx} className="flex items-center gap-3 rounded-md bg-card p-2">
                   <img src={i.image} alt={i.name} className="h-12 w-16 object-contain" />
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-xs">{i.name}</p>
                     <p className="text-sm font-semibold">{brl(i.price)}</p>
                   </div>
-                  <button onClick={() => cart.toggle(i)} aria-label="Remover"><Trash2 className="h-4 w-4 text-muted-foreground" /></button>
+                  <button onClick={() => cart.removeAt(idx)} aria-label="Remover"><Trash2 className="h-4 w-4 text-muted-foreground" /></button>
                 </div>
               ))}
             </div>
