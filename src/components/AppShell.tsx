@@ -19,7 +19,7 @@ const tabs = [
 function Logo() {
   return (
     <Link to="/" className="font-display text-xl font-bold tracking-tight">
-      csgo<span className="text-primary">)</span>money
+      cs case<span className="text-primary">2</span>
     </Link>
   );
 }
