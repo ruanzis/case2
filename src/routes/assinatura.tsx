@@ -56,7 +56,7 @@ function Assinatura() {
         <p className="flex gap-2"><Check className="h-4 w-4 text-success" /> Ganhe +2 Case semanais gratuitamente</p>
       </div>
       <p className="rounded-md bg-secondary p-3 text-xs text-muted-foreground">
-        Esta assinatura Premium libera os benefícios acima. Ela não tem relação com saque, não libera saldo e não é exigida para sacar.
+        Esta assinatura Premium libera os benefícios acima.
       </p>
 
       {active ? (
