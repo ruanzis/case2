@@ -127,12 +127,12 @@ function AuthPage() {
                 <p className="text-xs text-muted-foreground">Mínimo 8 caracteres, com maiúscula, minúscula, número e símbolo.</p>
               </>
             )}
-            <button disabled={loading} onClick={() => playTap()} className="w-full rounded-md bg-primary py-2.5 font-medium text-primary-foreground disabled:opacity-50">
+            <button disabled={loading} onClick={() => playTap(mode !== "in")} className="w-full rounded-md bg-primary py-2.5 font-medium text-primary-foreground disabled:opacity-50">
               {loading ? "Aguarde..." : mode === "in" ? "Entrar" : "Criar conta"}
             </button>
           </form>
           <div className="my-4 flex items-center gap-3 text-xs text-muted-foreground"><div className="h-px flex-1 bg-border" />ou<div className="h-px flex-1 bg-border" /></div>
-          <button type="button" onClick={google} className="flex w-full items-center justify-center gap-2 rounded-md border bg-card py-2.5 text-sm font-medium hover:bg-card-hover"><GoogleIcon />Continuar com o Google</button>
+          <button type="button" onClick={() => { playTap(true); google(); }} className="flex w-full items-center justify-center gap-2 rounded-md border bg-card py-2.5 text-sm font-medium hover:bg-card-hover"><GoogleIcon />Continuar com o Google</button>
           <button onClick={() => setMode(mode === "in" ? "up" : "in")} className="mt-4 w-full text-center text-sm text-muted-foreground hover:text-foreground">
             {mode === "in" ? "Primeiro acesso? Criar conta" : "Já tem conta? Entrar"}
           </button>
