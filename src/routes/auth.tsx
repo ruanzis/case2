@@ -137,6 +137,7 @@ function SkinsBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 flex flex-col justify-center gap-6 opacity-40">
       {row(false)}
+      <img src={purpleBackdrop.url} alt="" className="absolute inset-0 h-full w-full object-cover opacity-50" />
       {row(true)}
       {row(false)}
       <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background" />
