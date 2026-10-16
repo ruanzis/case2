@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
 import { brl } from "@/lib/skins";
@@ -22,17 +22,46 @@ export const Route = createFileRoute("/saque")({
   component: SaquePage,
 });
 
+function validCpf(d: string): boolean {
+  if (d.length !== 11 || /^(\d)\1+$/.test(d)) return false;
+  for (const n of [9, 10]) {
+    let sum = 0;
+    for (let i = 0; i < n; i++) sum += Number(d[i]) * (n + 1 - i);
+    const dv = ((sum * 10) % 11) % 10;
+    if (dv !== Number(d[n])) return false;
+  }
+  return true;
+}
+
+const DDDS = new Set("11 12 13 14 15 16 17 18 19 21 22 24 27 28 31 32 33 34 35 37 38 41 42 43 44 45 46 47 48 49 51 53 54 55 61 62 63 64 65 66 67 68 69 71 73 74 75 77 79 81 82 83 84 85 86 87 88 89 91 92 93 94 95 96 97 98 99".split(" "));
+
 function detectKey(raw: string): string {
   const v = raw.trim();
   if (!v) return "";
   if (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return "E-mail";
   if (/^[0-9a-f]{8}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{4}-?[0-9a-f]{12}$/i.test(v)) return "Aleatória";
-  const d = v.replace(/\D/g, "");
-  if (/^\+/.test(v) || (d.length === 13 && d.startsWith("55"))) return "Telefone";
-  if (d.length === 11 && /^\d{3}\.?\d{3}\.?\d{3}-?\d{2}$/.test(v)) return "CPF";
-  if (d.length === 11 || d.length === 10) return /^\(?\d{2}\)?\s?9/.test(v) ? "Telefone" : "CPF";
+  if (/[a-z]/i.test(v)) return "Inválida";
+  let d = v.replace(/\D/g, "");
+  const hasPlus = v.startsWith("+");
+  if (hasPlus || d.length >= 12) {
+    if (d.startsWith("55") && (d.length === 12 || d.length === 13) && DDDS.has(d.slice(2, 4))) return "Telefone";
+    return "Inválida";
+  }
+  if (d.length === 11) {
+    const formattedCpf = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(v);
+    const phoneOk = DDDS.has(d.slice(0, 2)) && d[2] === "9";
+    const cpfOk = validCpf(d);
+    if (formattedCpf) return cpfOk ? "CPF" : "Inválida";
+    if (/^\(/.test(v) || /\s/.test(v)) return phoneOk ? "Telefone" : "Inválida";
+    if (cpfOk && !phoneOk) return "CPF";
+    if (phoneOk) return "Telefone";
+    return cpfOk ? "CPF" : "Inválida";
+  }
+  if (d.length === 10 && DDDS.has(d.slice(0, 2))) return "Telefone";
   return "Inválida";
 }
+
+const STORE = "csgomoney-pix-account";
 
 function SaquePage() {
   const cart = useCart();
@@ -42,9 +71,18 @@ function SaquePage() {
   const send = useServerFn(requestWithdrawal);
   const [sending, setSending] = useState(false);
 
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem(STORE);
+      if (raw) setSaved(JSON.parse(raw));
+    } catch { /* ignore */ }
+  }, []);
+
   const register = () => {
     if (!type || type === "Inválida") { toast.error("Chave Pix inválida"); return; }
-    setSaved({ key: key.trim(), type });
+    const acc = { key: key.trim(), type };
+    setSaved(acc);
+    try { localStorage.setItem(STORE, JSON.stringify(acc)); } catch { /* ignore */ }
     toast.success("Conta Pix cadastrada");
   };
 
@@ -72,7 +110,11 @@ function SaquePage() {
 
       {saved && (
         <div className="space-y-3 rounded-xl border border-border bg-card p-5">
-          <p className="text-sm">Chave {saved.type}: <b>{saved.key}</b></p>
+          <div className="flex items-center justify-between gap-2">
+            <p className="text-sm">Chave {saved.type}: <b>{saved.key}</b></p>
+            <span className="rounded-full bg-success/20 px-2 py-0.5 text-xs font-semibold text-success">✓ Conta cadastrada</span>
+          </div>
+          <button className="text-xs text-muted-foreground underline" onClick={() => { localStorage.removeItem(STORE); setSaved(null); setKey(""); }}>Remover conta</button>
           <Button
             className="w-full"
             disabled={cart.balance <= 0 || sending}
