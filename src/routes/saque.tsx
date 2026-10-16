@@ -39,7 +39,7 @@ function SaquePage() {
   const type = detectKey(key);
 
   const register = () => {
-    if (!type || type === "Inválida") return toast.error("Chave Pix inválida");
+    if (!type || type === "Inválida") { toast.error("Chave Pix inválida"); return; }
     setSaved({ key: key.trim(), type });
     toast.success("Conta Pix cadastrada");
   };
