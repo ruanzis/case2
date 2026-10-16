@@ -104,6 +104,42 @@ export type Database = {
         }
         Relationships: []
       }
+      steam_accounts: {
+        Row: {
+          created_at: string
+          steam_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          steam_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          steam_id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      steam_link_states: {
+        Row: {
+          created_at: string
+          nonce: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          nonce: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          nonce?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           amount: number

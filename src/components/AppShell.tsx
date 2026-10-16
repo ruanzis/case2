@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { ShoppingCart, Crown, Zap, Users, Landmark, History, X, Trash2, LogOut } from "lucide-react";
 import { useEffect, useState, type ReactNode } from "react";
 import { Checkout } from "./Checkout";
+import { SteamConnect } from "./SteamConnect";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart";
 import { brl } from "@/lib/skins";
@@ -49,6 +50,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           <Link to="/assinatura" activeProps={{ className: "text-accent" }}>Premium</Link>
         </nav>
         <div className="ml-auto flex items-center gap-3">
+          <SteamConnect />
           <button
             onClick={() => cart.setOpen(true)}
             className="flex items-center gap-2 rounded-md bg-secondary px-3 py-1.5 text-sm"
