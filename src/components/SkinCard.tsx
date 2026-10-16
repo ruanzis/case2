@@ -55,6 +55,11 @@ export function SkinCard({ s }: { s: Skin }) {
             <span className="text-sm font-semibold tabular-nums">{qty}</span>
             <button onClick={() => setQty((q) => Math.min(left, q + 1))} aria-label="Aumentar" className="rounded p-0.5 hover:bg-background"><Plus className="h-3.5 w-3.5" /></button>
           </div>
+          <p className="flex items-center justify-between text-[11px] text-muted-foreground">
+            <span>Subtotal</span>
+            <span className="font-semibold tabular-nums text-foreground">{brl(s.price * qty)}</span>
+          </p>
+
           <div className="flex gap-1">
             <button onClick={add} className="flex-1 rounded-md bg-primary py-1.5 text-xs font-medium text-primary-foreground">Adicionar</button>
             <button onClick={() => { setPicking(false); setQty(1); }} aria-label="Cancelar" className="rounded-md bg-secondary px-2"><X className="h-3.5 w-3.5" /></button>
