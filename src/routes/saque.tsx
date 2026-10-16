@@ -5,6 +5,8 @@ import { useCart } from "@/lib/cart";
 import { brl } from "@/lib/skins";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useServerFn } from "@tanstack/react-start";
+import { requestWithdrawal } from "@/lib/withdraw.functions";
 
 export const Route = createFileRoute("/saque")({
   head: () => ({
@@ -37,6 +39,8 @@ function SaquePage() {
   const [key, setKey] = useState("");
   const [saved, setSaved] = useState<{ key: string; type: string } | null>(null);
   const type = detectKey(key);
+  const send = useServerFn(requestWithdrawal);
+  const [sending, setSending] = useState(false);
 
   const register = () => {
     if (!type || type === "Inválida") { toast.error("Chave Pix inválida"); return; }
@@ -71,8 +75,15 @@ function SaquePage() {
           <p className="text-sm">Chave {saved.type}: <b>{saved.key}</b></p>
           <Button
             className="w-full"
-            disabled={cart.balance <= 0}
-            onClick={() => toast.success("Solicitação de saque enviada para análise. Entraremos em contato no privado.")}
+            disabled={cart.balance <= 0 || sending}
+            onClick={async () => {
+              setSending(true);
+              try {
+                await send({ data: { pixKey: saved.key, pixType: saved.type as "CPF" } });
+                toast.success("Solicitação de saque enviada para análise. Entraremos em contato no privado.");
+              } catch (e) { toast.error(e instanceof Error ? e.message : "Erro"); }
+              finally { setSending(false); }
+            }}
           >
             Solicitar saque agora
           </Button>

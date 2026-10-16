@@ -15,6 +15,13 @@
       "when": 1792108160103,
       "tag": "0001_subscriptions",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792108958423,
+      "tag": "0002_withdrawal_requests",
+      "breakpoints": true
     }
   ]
 }

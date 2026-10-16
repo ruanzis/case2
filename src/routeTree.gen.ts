@@ -16,6 +16,7 @@ import { Route as FaqRouteImport } from './routes/faq'
 import { Route as HistoricoRouteImport } from './routes/historico'
 import { Route as P2pRouteImport } from './routes/p2p'
 import { Route as SaqueRouteImport } from './routes/saque'
+import { Route as SolicitacoesRouteImport } from './routes/solicitacoes'
 import { Route as VendaInstantaneaRouteImport } from './routes/venda-instantanea'
 
 const IndexRoute = IndexRouteImport.update({
@@ -53,6 +54,11 @@ const SaqueRoute = SaqueRouteImport.update({
   path: '/saque',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SolicitacoesRoute = SolicitacoesRouteImport.update({
+  id: '/solicitacoes',
+  path: '/solicitacoes',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const VendaInstantaneaRoute = VendaInstantaneaRouteImport.update({
   id: '/venda-instantanea',
   path: '/venda-instantanea',
@@ -67,6 +73,7 @@ export interface FileRoutesByFullPath {
   '/historico': typeof HistoricoRoute
   '/p2p': typeof P2pRoute
   '/saque': typeof SaqueRoute
+  '/solicitacoes': typeof SolicitacoesRoute
   '/venda-instantanea': typeof VendaInstantaneaRoute
 }
 export interface FileRoutesByTo {
@@ -77,6 +84,7 @@ export interface FileRoutesByTo {
   '/historico': typeof HistoricoRoute
   '/p2p': typeof P2pRoute
   '/saque': typeof SaqueRoute
+  '/solicitacoes': typeof SolicitacoesRoute
   '/venda-instantanea': typeof VendaInstantaneaRoute
 }
 export interface FileRoutesById {
@@ -88,6 +96,7 @@ export interface FileRoutesById {
   '/historico': typeof HistoricoRoute
   '/p2p': typeof P2pRoute
   '/saque': typeof SaqueRoute
+  '/solicitacoes': typeof SolicitacoesRoute
   '/venda-instantanea': typeof VendaInstantaneaRoute
 }
 export interface FileRouteTypes {
@@ -100,6 +109,7 @@ export interface FileRouteTypes {
     | '/historico'
     | '/p2p'
     | '/saque'
+    | '/solicitacoes'
     | '/venda-instantanea'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -110,6 +120,7 @@ export interface FileRouteTypes {
     | '/historico'
     | '/p2p'
     | '/saque'
+    | '/solicitacoes'
     | '/venda-instantanea'
   id:
     | '__root__'
@@ -120,6 +131,7 @@ export interface FileRouteTypes {
     | '/historico'
     | '/p2p'
     | '/saque'
+    | '/solicitacoes'
     | '/venda-instantanea'
   fileRoutesById: FileRoutesById
 }
@@ -131,6 +143,7 @@ export interface RootRouteChildren {
   HistoricoRoute: typeof HistoricoRoute
   P2pRoute: typeof P2pRoute
   SaqueRoute: typeof SaqueRoute
+  SolicitacoesRoute: typeof SolicitacoesRoute
   VendaInstantaneaRoute: typeof VendaInstantaneaRoute
 }
 
@@ -185,6 +198,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SaqueRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/solicitacoes': {
+      id: '/solicitacoes'
+      path: '/solicitacoes'
+      fullPath: '/solicitacoes'
+      preLoaderRoute: typeof SolicitacoesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/venda-instantanea': {
       id: '/venda-instantanea'
       path: '/venda-instantanea'
@@ -203,6 +223,7 @@ const rootRouteChildren: RootRouteChildren = {
   HistoricoRoute: HistoricoRoute,
   P2pRoute: P2pRoute,
   SaqueRoute: SaqueRoute,
+  SolicitacoesRoute: SolicitacoesRoute,
   VendaInstantaneaRoute: VendaInstantaneaRoute,
 }
 export const routeTree = rootRouteImport
