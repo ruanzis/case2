@@ -84,3 +84,7 @@
 @keyframes marquee-rev { from { transform: translateX(-50%); } to { transform: translateX(0); } }
 @utility animate-marquee { animation: marquee 40s linear infinite; }
 @utility animate-marquee-rev { animation: marquee-rev 48s linear infinite; }
+@keyframes streaks { 0% { transform: translateX(0) scale(1.3); } 50% { transform: translateX(-30%) scale(1.3); } 100% { transform: translateX(0) scale(1.3); } }
+@keyframes streaks-glow { 0%,100% { opacity: .55; } 50% { opacity: .9; } }
+@utility animate-streaks { animation: streaks 14s ease-in-out infinite, streaks-glow 4s ease-in-out infinite; }
+@utility font-delicate { font-family: "Cormorant Garamond", serif; font-style: italic; }

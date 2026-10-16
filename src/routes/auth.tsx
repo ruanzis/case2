@@ -7,6 +7,7 @@ import { lovable } from "@/integrations/lovable/index";
 import { useCart } from "@/lib/cart";
 import { skins } from "@/lib/skins";
 import purpleBackdrop from "@/assets/auth-purple.png.asset.json";
+import streaks from "@/assets/auth-streaks.png.asset.json";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -86,6 +87,9 @@ function AuthPage() {
 
   return (
     <div className="relative flex min-h-[calc(100vh-4rem)] items-center justify-center overflow-hidden rounded-xl">
+      <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+        <img src={streaks.url} alt="" className="absolute inset-y-0 left-0 h-full w-[160%] max-w-none object-cover animate-streaks" />
+      </div>
       <SkinsBackdrop />
       <div className="relative mx-auto w-full max-w-sm rounded-xl border bg-surface/90 p-6 shadow-2xl backdrop-blur-md">
       {sent ? (
@@ -95,7 +99,10 @@ function AuthPage() {
         </div>
       ) : (
         <>
-          <h1 className="mb-1 font-display text-2xl font-bold">{mode === "in" ? "Entrar" : "Criar conta"}</h1>
+          <div className="mb-1 flex items-baseline gap-3">
+            <h1 className="font-display text-2xl font-bold">{mode === "in" ? "Entrar" : "Criar conta"}</h1>
+            <span className="font-delicate text-lg text-primary">Vendas de skins CS2</span>
+          </div>
           <p className="mb-5 text-sm text-muted-foreground">Para acessar o site é preciso se registrar. Suas compras e histórico ficam salvos na conta.</p>
           <form onSubmit={submit} className="space-y-3">
             <input className={input} type="email" placeholder="E-mail" autoComplete="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} />
@@ -140,7 +147,7 @@ function SkinsBackdrop() {
       <img src={purpleBackdrop.url} alt="" className="absolute inset-0 h-full w-full object-cover opacity-50" />
       {row(true)}
       {row(false)}
-      <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background" />
+      <div className="absolute inset-0 bg-gradient-to-r from-background/60 via-transparent to-background/60" />
     </div>
   );
 }
