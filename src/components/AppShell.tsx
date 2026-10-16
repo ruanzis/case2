@@ -32,7 +32,7 @@ export function AppShell({ children }: { children: ReactNode }) {
   const pathname = useRouterState({ select: (r) => r.location.pathname });
   const onAuth = pathname === "/inicio";
   useEffect(() => {
-    if (cart.authReady && !cart.user && !onAuth) navigate({ to: "/auth", replace: true });
+    if (cart.authReady && !cart.user && !onAuth) navigate({ to: "/inicio", replace: true });
   }, [cart.authReady, cart.user, onAuth, navigate]);
   if (!onAuth && !cart.user) {
     return <div className="flex min-h-screen items-center justify-center text-sm text-muted-foreground">Carregando...</div>;
